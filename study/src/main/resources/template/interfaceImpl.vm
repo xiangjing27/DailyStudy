@@ -1,0 +1,34 @@
+package ${package};
+
+import java.util.List;
+import com.taobao.mtop.api.domain.utils.Result;
+
+public class ${className} {
+
+    #foreach( $method in $methods)
+        #set($first = 1)
+        /**
+        * ${method.comment}
+        */
+        @Override
+        @AppAuthentication(description = "司机操作", driverAuthentication = true)
+        Result ${method.name}(#foreach($param in ${method.params})#if($first > 1),#end#if($first == 1)#set($first = 2)#end ${param.type} ${param.name}#end) {
+            try {
+                log.info(String.format("LoadingMtopServiceImpl/arrival/inParam/%s", JSONObject.toJSONString(param)));
+
+                // 参数校验
+                #foreach($param in ${method.params})
+                #if(${param.type} == "String")
+                Preconditions.checkArgument(StringUtils.isNotBlank(${param.name}), "${param.comment}不能为空}");
+                #elseif(${param.type} == "Integer")
+                #end
+                #end
+
+            } catch (Exception e){
+                log.error("LoadingMtopServiceImpl/arrival/ERROR", e);
+                return MtopResultTranslator.trans(e);
+            }
+        }
+
+    #end
+}

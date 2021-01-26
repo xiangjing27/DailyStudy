@@ -1,0 +1,16 @@
+package ${package};
+
+import java.util.List;
+import com.taobao.mtop.api.domain.utils.Result;
+
+public interface ${className} {
+
+    #foreach( $method in $methods)
+        #set($first = 1)
+        /**
+        * ${method.comment}
+        */
+        Result ${method.name}(#foreach($param in ${method.params})#if($first > 1),#end#if($first == 1)#set($first = 2)#end ${param.type} ${param.name}#end);
+
+    #end
+}
